@@ -8,13 +8,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.ricardo.nuidoces.domain.Categoria;
+import com.ricardo.nuidoces.domain.Produto;
 import com.ricardo.nuidoces.repositories.CategoriaRepository;
+import com.ricardo.nuidoces.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class NuidocesApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private ProdutoRepository produtoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(NuidocesApplication.class, args);
@@ -25,9 +30,25 @@ public class NuidocesApplication implements CommandLineRunner {
 		
 		Categoria cat1 = new Categoria(null, "Doces Simples");
 		Categoria cat2 = new Categoria(null, "Doces Goumert");
-		Categoria cat3 = new Categoria(null, "Torta de morango");
 		
-		categoriaRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
+		
+		Produto p1 = new Produto(null, "Brigadeiro simples", 1.40);
+		Produto p2 = new Produto(null, "Beijinho simples", 1.40);
+		Produto p3 = new Produto(null, "Brigadeiro Gourmet", 1.70);
+		Produto p4 = new Produto(null, "Torta de morango", 51.00);
+		
+		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p4));
+		cat2.getProdutos().addAll(Arrays.asList(p3));
+		
+		
+		p1.getCategorias().addAll(Arrays.asList(cat1));
+		p2.getCategorias().addAll(Arrays.asList(cat1));
+		p3.getCategorias().addAll(Arrays.asList(cat2));
+		p4.getCategorias().addAll(Arrays.asList(cat1));
+		
+		categoriaRepository.saveAll(Arrays.asList(cat1, cat2));
+		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p4));
+		
 		
 		
 	}
